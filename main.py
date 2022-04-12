@@ -14,7 +14,7 @@ line6 = "int c = a + x , d , e = b ;"
 
 def ParseFunctionHeader(str):
     argument=str.split("(")[1].split(")")[:-1][0].replace("int","").replace(",","")
-    print(argument.split())
+    return argument.split()
 def ParseLine(line):
     array=line.split()
     i=1
@@ -23,12 +23,22 @@ def ParseLine(line):
         if array[i-1]=='int' or array[i-1]==',':
             variables.append(array[i])
         i+=1
-    print(variables)
-
+    return variables
 def CreateSymbolTable():
+    # reading the txt file
     f = open("code.txt", "r")
-    print(f.read())
-
+    code = f.readlines()
+    # getting the parameters
+    parameters = ParseFunctionHeader(code[0])
+    print(parameters)
+    # getting the local variables
+    i = 1
+    localVar = []
+    while i < len(code):
+        localVar.extend(ParseLine(code[i]))
+        i+=1
+    print(localVar)
+    #
 if __name__ == '__main__':
     CreateSymbolTable()
 
