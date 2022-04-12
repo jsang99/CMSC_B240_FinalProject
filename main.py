@@ -30,15 +30,25 @@ def CreateSymbolTable():
     code = f.readlines()
     # getting the parameters
     parameters = ParseFunctionHeader(code[0])
-    print(parameters)
+    # print(parameters)
     # getting the local variables
     i = 1
     localVar = []
     while i < len(code):
         localVar.extend(ParseLine(code[i]))
         i+=1
-    print(localVar)
-    #
+    # print(localVar)
+    # assigning offset
+    symbolT ={}
+    counter = 0
+    for lv in localVar:
+        symbolT[lv] = counter
+        counter -= 1
+    counter = 4
+    for p in parameters:
+        symbolT[p] = counter
+        counter +=1
+    print(symbolT)
 if __name__ == '__main__':
     CreateSymbolTable()
 
