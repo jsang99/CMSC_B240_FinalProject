@@ -6,13 +6,10 @@ str4 = "int fun3 ( int x , int y , int z ) {"
 
 
 def ParseFunctionHeader(str):
-    # store parsed string components into an array called words?
-    #
-
-
-
-# Press the green button in the gutter to run the script.
+    argument=str.split("(")[1].split(")")[:-1][0].replace("int","").replace(",","")
+    print(argument.split())
 if __name__ == '__main__':
-    ParseFunctionHeader(str)
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    ParseFunctionHeader(str1)
+    ParseFunctionHeader(str2)
+    ParseFunctionHeader(str3)
+    ParseFunctionHeader(str4)
