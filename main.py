@@ -75,21 +75,18 @@ def SyntaxCheck(filename):
                         i += 1
         n += 1
 
-
 def CreateSymbolTable(filename):
     # reading the txt file
     f = open(filename, "r")
     code = f.readlines()
     # getting the parameters
     parameters = ParseFunctionHeader(code[0])
-    # print(parameters)
     # getting the local variables
     i = 1
     localVar = []
     while i < len(code):
         localVar.extend(ParseLine(code[i]))
         i += 1
-    # print(localVar)
     # assigning offset
     symbolT = {}
     counter = 0
@@ -104,7 +101,7 @@ def CreateSymbolTable(filename):
 
 
 if __name__ == '__main__':
-    # CreateSymbolTable("sample.code")
+    print(CreateSymbolTable("sample.code"))
     print(SyntaxCheck("illegal.code"))
 
     '''print(ParseFunctionHeader(str1))
