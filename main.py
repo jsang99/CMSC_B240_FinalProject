@@ -31,28 +31,49 @@ def SyntaxCheck(filename):
     f = open(filename, "r")
     code = f.readlines()
     n = 1
-    for n in range(len(code)):
-        n += 1
-        print("new line", n)
+    while n < (len(code) - 1):
         line = code[n].split()
-        #print(line)
-        #print(len(line))
         if line[-1] != ";":
             print("Line " + str(n) + " Error: Doesn’t end with semicolon")
-            n+=1
+
         elif line[0] == "int":
             i = 1
             while i < len(line) - 1:
                 if (line[i] != "=" or line[i] != "+" or line[i] != "," or line[i] != ";") and \
                         (line[i + 1] != "=" and line[i + 1] != "+" and line[i + 1] != "," and line[i + 1] != ";"):
                     print("Line " + str(n) + " Error: Variable names can’t contain space")
-                    print(line[i], (line[i+1]))
-                    i += 1
-                else:
                     break
-            n+=1
+                elif (line[i] == "=") and \
+                        (line[i + 1] == "=" or line[i + 1] == "+" or line[i + 1] == "," or line[i + 1] == ";"):
+                    print("Line " + str(n) + " Error: Need value after assignment operator")
+                    break
+                elif (line[i] != "=" and line[i] != "+" and line[i] != "," and line[i] != ";") and \
+                        (line[i + 1] != "=" and line[i + 1] != "+" and line[i + 1] != "," and line[i + 1] != ";"):
+                    print("Line " + str(n) + " Error: Need operator between values")
+                    break
+                else:
+                    i += 1
+        else:
+            i = 0
+            if line[0] == "=":
+                print("Line " + str(n) + " Error: Missing variable name")
 
-
+            else:
+                while i < len(line) - 1:
+                    if line[i] == "+" and (line[i + 1] == "=" or line[i + 1] == "+" or line[i + 1] == "," or line[i + 1] == ";"):
+                        print("Line " + str(n) + " Error: Need value after addition operator")
+                        break
+                    elif i > 0 and (line[i - 1] == "=" or line[i - 1] == "+" or line[i - 1] == "," or line[i - 1] == ";") and (line[i] == "+"):
+                        print("Line " + str(n) + " Error: Need value before addition operator")
+                        break
+                    elif (line[i] != "=" and line[i] != "+" and line[i] != "," and line[i] != ";" and line[i] != "return") and (line[i + 1] != "=" and line[i + 1] != "+" and line[i + 1] != "," and line[i + 1] != ";"):
+                        print("Line " + str(n) + " Error: Illegal type")
+                        break
+                    elif i > 0 and (line[i - 1] == "=" or line[i - 1] == "+" or line[i - 1] == "," or line[i - 1] == ";") and (line[i] == "="):
+                        print("Line " + str(n) + " Error: Missing variable name")
+                    else:
+                        i += 1
+        n += 1
 
 
 def CreateSymbolTable(filename):
