@@ -60,16 +60,21 @@ def SyntaxCheck(filename):
 
             else:
                 while i < len(line) - 1:
-                    if line[i] == "+" and (line[i + 1] == "=" or line[i + 1] == "+" or line[i + 1] == "," or line[i + 1] == ";"):
+                    if line[i] == "+" and (line[i + 1] == "=" or line[i + 1] == "+"
+                                           or line[i + 1] == "," or line[i + 1] == ";"):
                         print("Line " + str(n) + " Error: Need value after addition operator")
                         break
-                    elif i > 0 and (line[i - 1] == "=" or line[i - 1] == "+" or line[i - 1] == "," or line[i - 1] == ";") and (line[i] == "+"):
+                    elif i > 0 and (line[i - 1] == "=" or line[i - 1] == "+" or
+                                    line[i - 1] == "," or line[i - 1] == ";") and (line[i] == "+"):
                         print("Line " + str(n) + " Error: Need value before addition operator")
                         break
-                    elif (line[i] != "=" and line[i] != "+" and line[i] != "," and line[i] != ";" and line[i] != "return") and (line[i + 1] != "=" and line[i + 1] != "+" and line[i + 1] != "," and line[i + 1] != ";"):
+                    elif (line[i] != "=" and line[i] != "+" and line[i] != "," and line[i] != ";" and
+                          line[i] != "return") and (line[i + 1] != "=" and line[i + 1] != "+" and
+                                                    line[i + 1] != "," and line[i + 1] != ";"):
                         print("Line " + str(n) + " Error: Illegal type")
                         break
-                    elif i > 0 and (line[i - 1] == "=" or line[i - 1] == "+" or line[i - 1] == "," or line[i - 1] == ";") and (line[i] == "="):
+                    elif i > 0 and (line[i - 1] == "=" or line[i - 1] == "+" or line[i - 1] == ","
+                                    or line[i - 1] == ";") and (line[i] == "="):
                         print("Line " + str(n) + " Error: Missing variable name")
                     else:
                         i += 1
@@ -99,6 +104,8 @@ def CreateSymbolTable(filename):
         counter += 1
     print(symbolT)
 
+
+#did you get this
 
 if __name__ == '__main__':
     print(CreateSymbolTable("sample.code"))
