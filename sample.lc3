@@ -1,0 +1,29 @@
+;; int x = 7 ;
+AND R0, R0, 0; clear R0
+ADD R0, R0, 7; add 7 to R0
+STR R0, FP, 0; write x
+
+;; int y = a + b ;
+LDR R0, FP, 4; read a
+LDR R1, FP, 5; read b
+ADD R0, R0, R1; put sum in R0
+STR R0, FP, -1; write y
+
+;; x = a + 4 ;
+LDR R0, FP, 4;; read a
+AND R1, R1, 0; clear R1
+ADD R1, R1, 4; add 4 to R1
+ADD R0, R0, R1; put sum in R0
+STR R0, FP, 0; write x
+
+;; int t = x + b ;
+LDR R0, FP, 0; read x
+LDR R1, FP, 5; read b
+ADD R0, R0, R1; put sum in R0
+STR R0, FP, -2; write t
+
+;; return x + t ;
+LDR R0, FP, 0; read x
+LDR R1, FP, -2; read t
+ADD R0, R0, R1; put sum in R0
+STR R0, FP, 3; write RV

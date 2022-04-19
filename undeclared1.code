@@ -1,0 +1,5 @@
+int fun ( int a , int b ) {
+  int x = a ;
+  y = a + b ;
+  return x ;
+}
