@@ -117,7 +117,22 @@ def AssemblyGenerator(line):
         str = "STR R0, FP," + offset + ";"
         output.append(str)
 
+    def Order(line):
+        array = line.split
+        for i in range(0, len(array) - 1):
+            if array[i] == "=":
+                nvar = array[i - 1]
+                keyt = dict[nvar]
+                value = array[i + 1]
     return output
+
+
+
+
+
+
+
+
 
 
 
@@ -128,7 +143,7 @@ if __name__ == '__main__':
     #print(CreateSymbolTable("sample.code"))
     #print(SyntaxCheck("illegal.code"))
 
-    '''print(ParseFunctionHeader(str1))
+    print(ParseFunctionHeader(str1))
     print(ParseFunctionHeader(str2))
     print(ParseFunctionHeader(str3))
     print(ParseFunctionHeader(str4))
@@ -137,4 +152,6 @@ if __name__ == '__main__':
     print(ParseLine(line3))
     print(ParseLine(line4))
     print(ParseLine(line5))
-    print(ParseLine(line6))'''
+    print(ParseLine(line6))
+    x = "a b c d e;lkdjfl"
+    print(x.split())
