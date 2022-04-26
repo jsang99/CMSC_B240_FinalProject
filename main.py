@@ -104,9 +104,6 @@ def CreateSymbolTable(filename):
         counter += 1
     print(symbolT)
 
-
-#did you get this
-
 if __name__ == '__main__':
     print(CreateSymbolTable("sample.code"))
     print(SyntaxCheck("illegal.code"))
