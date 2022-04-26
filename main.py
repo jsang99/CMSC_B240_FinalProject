@@ -102,29 +102,29 @@ def CreateSymbolTable(filename):
     for p in parameters:
         symbolT[p] = counter
         counter += 1
-    print(symbolT)
+    return symbolT
 
-def AssemblyGenerator(line):
-    array=line.split()
-    print(array[0])
-    value = "123"
-    offset = "321"
-    output = []
-    if (array[0] == "int"):
-        output.append("AND R0, R0, 0;")
-        str = "ADD R0, R0, "+ value + ";"
-        output.append(str)
-        str = "STR R0, FP," + offset + ";"
-        output.append(str)
-
-    def Order(line):
-        array = line.split
+def AssemblyGenerator(file):
+    symbolT = CreateSymbolTable(file)
+    f = open(file, "r")
+    code = f.readlines()
+    for line in code:
+        array=line.split()
+        output = []
         for i in range(0, len(array) - 1):
             if array[i] == "=":
                 nvar = array[i - 1]
-                keyt = dict[nvar]
+                offset = symbolT[nvar]
                 value = array[i + 1]
-    return output
+
+                output.append("AND R0, R0, 0;")
+                instruction = "ADD R0, R0, "+ str(value) + ";"
+                output.append(instruction)
+                instruction = "STR R0, FP," + str(offset) + ";"
+                output.append(instruction)
+        print(output)
+    return
+
 
 
 
@@ -138,12 +138,12 @@ def AssemblyGenerator(line):
 
 if __name__ == '__main__':
 
-    print(AssemblyGenerator("int x = 7 ;"))
+
 
     #print(CreateSymbolTable("sample.code"))
     #print(SyntaxCheck("illegal.code"))
-
-    print(ParseFunctionHeader(str1))
+    print(AssemblyGenerator("sample.code"))
+    '''print(ParseFunctionHeader(str1))
     print(ParseFunctionHeader(str2))
     print(ParseFunctionHeader(str3))
     print(ParseFunctionHeader(str4))
@@ -154,4 +154,6 @@ if __name__ == '__main__':
     print(ParseLine(line5))
     print(ParseLine(line6))
     x = "a b c d e;lkdjfl"
-    print(x.split())
+    print(x.split())'''
+
+
