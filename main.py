@@ -104,9 +104,29 @@ def CreateSymbolTable(filename):
         counter += 1
     print(symbolT)
 
+def AssemblyGenerator(line):
+    array=line.split()
+    print(array[0])
+    value = "123"
+    offset = "321"
+    output = []
+    if (array[0] == "int"):
+        output.append("AND R0, R0, 0;")
+        str = "ADD R0, R0, "+ value + ";"
+        output.append(str)
+        str = "STR R0, FP," + offset + ";"
+        output.append(str)
+
+    return output
+
+
+
 if __name__ == '__main__':
-    print(CreateSymbolTable("sample.code"))
-    print(SyntaxCheck("illegal.code"))
+
+    print(AssemblyGenerator("int x = 7 ;"))
+
+    #print(CreateSymbolTable("sample.code"))
+    #print(SyntaxCheck("illegal.code"))
 
     '''print(ParseFunctionHeader(str1))
     print(ParseFunctionHeader(str2))
