@@ -27,3 +27,12 @@ LDR R0, FP, 0; read x
 LDR R1, FP, -2; read t
 ADD R0, R0, R1; put sum in R0
 STR R0, FP, 3; write RV
+
+
+int fun ( int a , int b ) {
+  int x = 7 ;
+  int y = a + b ;
+  x = a + 4 ;
+  int t = x + b ;
+  return x + t ;
+}

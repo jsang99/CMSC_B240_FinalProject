@@ -106,29 +106,36 @@ def CreateSymbolTable(filename):
 
 def AssemblyGenerator(file):
     symbolT = CreateSymbolTable(file)
+    print(symbolT)
     f = open(file, "r")
     code = f.readlines()
     # Split by commas (if there are multiple initializations) and have if statements for each split
-    for line in code:
+    for line in code[1:]:
+        print(line)
         # splitarray = line.split(",")         #### splits array if there are multiple commas
         # for part in splitarray:              ###
         array=line.split()
+        print(array)
         output = []
 
-        for i in range(0, len(array),-1):               ## always have
-            if i == len(array) -1:                     # clear register 0 at beginning of line
+        for i in range(len(array)-1,-1,-1):
+            if i == len(array) -1:
+                # clear register 0 at beginning of line
                 output.append("AND R0, R0, 0;")
+                print(output)
             if i == 0:
-                offset = symbolT[array[i]]
-                output.append(WriteVars(offset))
-
+                print('end')
             if str(type(array[i])) == "<class 'int'>":
                 output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
             elif array[i] == "+":
                 print("add")                                           ## is t;his wrong???
             elif array [i] == "=":
                 print("equals")
-            ##find a way to stop thing
+                offset = symbolT[array[i-1]]
+                output.append(WriteVars(offset))
+            elif array [i] == ';' or 'int':
+                ##find a way to stop thing
+                print()
             else: ## just one variable
                 offset = symbolT[array[i]]
                 output.append(AddVariable(offset))
@@ -184,7 +191,7 @@ def WriteVars(offset):
 
 
 
-
+# 9999
 
 
 
@@ -199,6 +206,7 @@ if __name__ == '__main__':
     #print(CreateSymbolTable("sample.code"))
     #print(SyntaxCheck("illegal.code"))
     print(AssemblyGenerator("sample.code"))
+
     '''print(ParseFunctionHeader(str1))
     print(ParseFunctionHeader(str2))
     print(ParseFunctionHeader(str3))
@@ -209,8 +217,7 @@ if __name__ == '__main__':
     print(ParseLine(line4))
     print(ParseLine(line5))
     print(ParseLine(line6))
-    x = "a b c d e;lkdjfl"
-    print(x.split())'''
+    '''
 
                 # 40184/index.html
                 # 43210/choose-db?db=mongo
