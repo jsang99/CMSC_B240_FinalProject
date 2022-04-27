@@ -108,22 +108,67 @@ def AssemblyGenerator(file):
     symbolT = CreateSymbolTable(file)
     f = open(file, "r")
     code = f.readlines()
+    # Split by commas and have if statements
     for line in code:
-        array=line.split()
-        output = []
-        for i in range(0, len(array) - 1):
-            if array[i] == "=":
-                nvar = array[i - 1]
-                offset = symbolT[nvar]
-                value = array[i + 1]
+        splitarray = line.split(",")         #### splits array if there are multiple commas
+        for part in splitarray:              ###
+            array=part.split()
+            output = []
 
-                output.append("AND R0, R0, 0;")
-                instruction = "ADD R0, R0, "+ str(value) + ";"
-                output.append(instruction)
-                instruction = "STR R0, FP," + str(offset) + ";"
-                output.append(instruction)
+            for i in range(0, len(array),-1):               ## always have
+                if i == len(array):                     # clear register 0 at beginning of line
+                    output.append("AND R0, R0, 0;")
+                if str(type(array[i])) == "<class 'int'>":
+                    output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
+                elif array[i] == "+":
+                    print()                                   ## is t;his wrong???
+                elif array [i] == "=":
+                    return
+                    ##find a way to stop thing
+                else: ## just one variable
+                    offset = symbolT[array[i]]
+
+
+
+
+
+        # for i in range(0, len(array) - 1):
+        #     if array[i] == "=":
+        #         nvar = array[i - 1]
+        #         offset = symbolT[nvar]
+        #         value = array[i + 1]
+        #         output.append("AND R0, R0, 0;") ## for numberical values
+        #         instruction = "ADD R0, R0, "+ str(value) + ";"
+        #         output.append(instruction)
+        #         instruction = "STR R0, FP," + str(offset) + ";"
+        #         output.append(instruction)
+        #         output.append(" ")
         print(output)
     return
+
+
+def AddNumber(num):
+    ANout=[]  ## for numberical values
+    instruction = "ADD R0, R0, " + str(num) + ";"
+    ANout.append(instruction)
+    return ANout
+
+
+def AddVariable(var, offset):          # loads to R1, adds to R0
+    AVout = []
+    instruction = "LDR R1, FP," + str(offset) + ";"
+    AVout.append(instruction)
+    instruction = "ADD R0, R0, R1"
+    AVout.append(instruction)
+    return AVout
+
+
+def WriteVars(num, offset):
+
+
+    instruction = "STR R0, FP," + str(offset) + ";"
+
+
 
 
 
@@ -157,3 +202,10 @@ if __name__ == '__main__':
     print(x.split())'''
 
 
+
+
+
+
+
+
+#165.106.10.170:50515/index.html
