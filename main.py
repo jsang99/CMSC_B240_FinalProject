@@ -108,25 +108,33 @@ def AssemblyGenerator(file):
     symbolT = CreateSymbolTable(file)
     f = open(file, "r")
     code = f.readlines()
-    # Split by commas and have if statements
+    # Split by commas (if there are multiple initializations) and have if statements for each split
     for line in code:
-        splitarray = line.split(",")         #### splits array if there are multiple commas
-        for part in splitarray:              ###
-            array=part.split()
-            output = []
+        # splitarray = line.split(",")         #### splits array if there are multiple commas
+        # for part in splitarray:              ###
+        array=line.split()
+        output = []
 
-            for i in range(0, len(array),-1):               ## always have
-                if i == len(array):                     # clear register 0 at beginning of line
-                    output.append("AND R0, R0, 0;")
-                if str(type(array[i])) == "<class 'int'>":
-                    output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
-                elif array[i] == "+":
-                    print()                                   ## is t;his wrong???
-                elif array [i] == "=":
-                    return
-                    ##find a way to stop thing
-                else: ## just one variable
-                    offset = symbolT[array[i]]
+        for i in range(0, len(array),-1):               ## always have
+            if i == len(array) -1:                     # clear register 0 at beginning of line
+                output.append("AND R0, R0, 0;")
+            if i == 0:
+                offset = symbolT[array[i]]
+                output.append(WriteVars(offset))
+
+            if str(type(array[i])) == "<class 'int'>":
+                output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
+            elif array[i] == "+":
+                print("add")                                           ## is t;his wrong???
+            elif array [i] == "=":
+                print("equals")
+            ##find a way to stop thing
+            else: ## just one variable
+                offset = symbolT[array[i]]
+                output.append(AddVariable(offset))
+                print("var add")
+            print(output)
+        return output
 
 
 
@@ -143,8 +151,8 @@ def AssemblyGenerator(file):
         #         instruction = "STR R0, FP," + str(offset) + ";"
         #         output.append(instruction)
         #         output.append(" ")
-        print(output)
-    return
+    #     print(output)
+    # return
 
 
 def AddNumber(num):
@@ -154,7 +162,7 @@ def AddNumber(num):
     return ANout
 
 
-def AddVariable(var, offset):          # loads to R1, adds to R0
+def AddVariable(offset):          # loads to R1, adds to R0
     AVout = []
     instruction = "LDR R1, FP," + str(offset) + ";"
     AVout.append(instruction)
@@ -163,10 +171,13 @@ def AddVariable(var, offset):          # loads to R1, adds to R0
     return AVout
 
 
-def WriteVars(num, offset):
-
-
+def WriteVars(offset):
+    WVout = []
     instruction = "STR R0, FP," + str(offset) + ";"
+    WVout.append(instruction)
+    return WVout
+
+
 
 
 
@@ -201,11 +212,8 @@ if __name__ == '__main__':
     x = "a b c d e;lkdjfl"
     print(x.split())'''
 
-
-
-
-
-
-
-
+                # 40184/index.html
+                # 43210/choose-db?db=mongo
+ #             :30046
 #165.106.10.170:50515/index.html
+ # 40404/pickDatabase?dbchoice=mongo
