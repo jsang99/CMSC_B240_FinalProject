@@ -119,13 +119,17 @@ def AssemblyGenerator(file):
         output = []
 
         for i in range(len(array)-1,-1,-1):
+            print(i)
+            print(array[i])
             if i == len(array) -1:
                 # clear register 0 at beginning of line
+                print('ride of ;')
                 output.append("AND R0, R0, 0;")
                 print(output)
-            if i == 0:
+            elif i == 0:
                 print('end')
-            if str(type(array[i])) == "<class 'int'>":
+            elif str(type(array[i])) == "<class 'int'>":
+                print('int')
                 output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
             elif array[i] == "+":
                 print("add")                                           ## is t;his wrong???
@@ -133,10 +137,8 @@ def AssemblyGenerator(file):
                 print("equals")
                 offset = symbolT[array[i-1]]
                 output.append(WriteVars(offset))
-            elif array [i] == ';' or 'int':
-                ##find a way to stop thing
-                print()
             else: ## just one variable
+                print('var')
                 offset = symbolT[array[i]]
                 output.append(AddVariable(offset))
                 print("var add")
