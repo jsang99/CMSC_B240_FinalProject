@@ -111,6 +111,8 @@ def AssemblyGenerator(file):
     code = f.readlines()
     # Split by commas (if there are multiple initializations) and have if statements for each split
     for line in code[1:]:
+
+
         print(line)
         # splitarray = line.split(",")         #### splits array if there are multiple commas
         # for part in splitarray:              ###
@@ -121,6 +123,9 @@ def AssemblyGenerator(file):
         for i in range(len(array)-1,-1,-1):
             print(i)
             print(array[i])
+
+            array[i]= intChange(array[i])  ## change str to int if possible
+
             if i == len(array) -1:
                 # clear register 0 at beginning of line
                 print('ride of ;')
@@ -128,6 +133,9 @@ def AssemblyGenerator(file):
                 print(output)
             elif i == 0:
                 print('end')
+
+
+
             elif str(type(array[i])) == "<class 'int'>":
                 print('int')
                 output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
@@ -188,7 +196,15 @@ def WriteVars(offset):
 
 
 
-
+def intChange (str):
+    isInt = True
+    try:
+        # converting to integer
+        int(str)
+    except ValueError:
+        isInt = False
+    if isInt:
+        return int(str)
 
 
 
