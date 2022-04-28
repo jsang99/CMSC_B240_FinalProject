@@ -232,6 +232,8 @@ def AssemblyGeneratorKevin(file):
             localVar = array[array.index("int") + 1]
             if localVar not in allLocalVars:
                 allLocalVars.append(localVar)
+            else:
+                return "Error: variable" + localVar + " is being declared a second time"
             offset = str(symbolT[localVar])
 
             # generating instructions
@@ -381,7 +383,6 @@ def AssemblyGeneratorKevin(file):
     file1 = open(file+'_output.lc3', 'w')
     file1.writelines(output)  ###output
     file1.close()  # Closing file
-    return output
 
 if __name__ == '__main__':
     # print(CreateSymbolTable("sample.code"))
