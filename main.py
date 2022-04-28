@@ -359,10 +359,17 @@ def AssemblyGeneratorKevin(file):
 
             if len(usedParameters) < plusCounter + 1:
                 for location in plusLocation:
-                    if array[location - 1] not in allLocalVars and array[location - 1] not in usedParameters:
-                        constantLocation.append(location - 1)
-                    if array[location + 1] not in allLocalVars and array[location + 1] not in usedParameters:
+                    if array[location - 1] not in usedParameters:
+                        if array[location - 1] not in allLocalVars and not array[location + 1].isdigit():
+                            return "Error: variable " + array[location - 1] + " is undeclared."
+                        else:
+                            constantLocation.append(location - 1)
+                    if array[location + 1] not in usedParameters:
                         constantLocation.append(location + 1)
+                        if array[location + 1] not in allLocalVars and not array[location + 1].isdigit():
+                            return "Error: variable " + array[location + 1] + " is undeclared."
+                        else:
+                            constantLocation.append(location + 1)
 
             # generating instructions
             for element in array:
