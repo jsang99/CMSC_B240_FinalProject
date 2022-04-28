@@ -202,9 +202,7 @@ def intChange(str):
 
 
 
-file1 = open('sample.lc3.output.txt', 'w')
-file1.writelines(output)                              ###output
-file1.close()                                   # Closing file
+
 
 
 # KEVIN's codes
@@ -380,7 +378,9 @@ def AssemblyGeneratorKevin(file):
                 i += 1
             instr = "STR R0, FP, 3; write RV"
             output.append(instr)
-
+    file1 = open('sample.lc3.output.txt', 'w')
+    file1.writelines(output)  ###output
+    file1.close()  # Closing file
     return output
 
 if __name__ == '__main__':
