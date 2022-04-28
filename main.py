@@ -80,6 +80,7 @@ def SyntaxCheck(filename):
                         i += 1
         n += 1
 
+
 def CreateSymbolTable(filename):
     # reading the txt file
     f = open(filename, "r")
@@ -104,42 +105,45 @@ def CreateSymbolTable(filename):
         counter += 1
     return symbolT
 
+
 def AssemblyGenerator(file):
-    symbolT = CreateSymbolTable(file)
-    print(symbolT)
+    symbolT = CreateSymbolTable(file)  # get symbol table
+    # print(symbolT)
     f = open(file, "r")
     code = f.readlines()
     # Split by commas (if there are multiple initializations) and have if statements for each split
+    lineNum = 1
     for line in code[1:]:
+        print("Line " + str(lineNum))
         print(line)
         # splitarray = line.split(",")         #### splits array if there are multiple commas
         # for part in splitarray:              ###
-        array=line.split()
+        array = line.split()
         print(array)
         output = []
-        for i in range(len(array)-1,-1,-1):
-            print(i)
-            print(array[i])
-            print(type(array[i]))
+        for i in range(len(array) - 1, -1, -1):
+            print("type:", type(array[i]))
+            print("i =", i)
+            print("element:", array[i])
 
-            array[i]= intChange(array[i])  ## change str to int if possible
+            # array[i] = intChange(array[i])  ## change str to int if possible
 
-            if i == len(array) -1:
+            if i == len(array) - 1:
                 # clear register 0 at beginning of line
-                print('rid of ;')
+                print("Operation:", 'getting rid of ;')
                 output.append("AND R0, R0, 0;")
             elif i == 0 and (array[i] == "int"):
-                print('end')
+                print("Operation:", 'end')
             elif str(type(array[i])) == "<class 'int'>":
                 print('int')
-                output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
+                output.append(AddNumber(array[i])[0])  # register 0 holds array[:-1]
             elif array[i] == "+":
-                print("add")                                           ## is t;his wrong???
+                print("add")  ## is t;his wrong???
             elif array[i] == "=":
                 print("equals")
-                offset = symbolT[array[i-1]]
+                offset = symbolT[array[i - 1]]
                 output.append(WriteVars(offset))
-            else: ## just one variable
+            elif str(type(array[i])) == "<class 'str'>":  ## just one variable
                 print('var')
                 print()
                 offset = symbolT[array[i]]
@@ -147,10 +151,6 @@ def AssemblyGenerator(file):
                 print("var add")
             print(output)
         return output
-
-
-
-
 
         # for i in range(0, len(array) - 1):
         #     if array[i] == "=":
@@ -168,13 +168,13 @@ def AssemblyGenerator(file):
 
 
 def AddNumber(num):
-    ANout=[]  ## for numberical values
+    ANout = []  ## for numberical values
     instruction = "ADD R0, R0, " + str(num) + ";"
     ANout.append(instruction)
     return ANout
 
 
-def AddVariable(offset):          # loads to R1, adds to R0
+def AddVariable(offset):  # loads to R1, adds to R0
     AVout = []
     instruction = "LDR R1, FP," + str(offset) + ";"
     AVout.append(instruction)
@@ -190,8 +190,7 @@ def WriteVars(offset):
     return WVout
 
 
-
-def intChange (str):
+def intChange(str):
     isInt = True
     try:
         # converting to integer
@@ -202,23 +201,124 @@ def intChange (str):
         return int(str)
 
 
+# KEVIN's codes
+def AssemblyGeneratorKevin(file):
+    symbolT = CreateSymbolTable(file)  # get symbol table
+    # print(symbolT)
+    f = open(file, "r")
+    code = f.readlines()
+    parameters = ParseFunctionHeader(code[0])
+    output = []
+    for line in code[1:-1]:
+        array = line.split()
+        print(array)
 
+        if "int" in array and "=" in array and "+" not in array:
+            #output = []
+            # parsing
+            value = array[array.index("=") + 1]
+            localVar = array[array.index("int") + 1]
+            offset = str(symbolT[localVar])
 
-# 9999
+            # generating instructions
+            instr = "AND R0, R0, 0; clear R0"
+            output.append(instr)
+            instr = "ADD R0, R0, " + value + "; add " + value + " to R0"
+            output.append(instr)
+            instr = "STR R0, FP, " + offset + "; write " + localVar
+            output.append(instr)
+            # print(output)
 
+        if "int" in array and "=" in array and "+" in array:
+            #output = []
+            # parsing
+            localVar = array[array.index("int") + 1]
+            usedParameters = []
+            usedParameterCounter = 0
+            regNum = usedParameterCounter
+            plusCounter = 0
+            plusLocation = []
+            for element in array:
+                if element == "+":
+                    plusCounter += 1
+                    plusLocation.append(array.index(element))
+            for parameter in parameters:
+                if parameter in array:
+                    usedParameters.append(parameter)
 
+            # generating instructions
+            for usedParameter in usedParameters:
+                instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[usedParameter]) + "; read " + usedParameter[
+                    usedParameterCounter]
+                output.append(instr)
+                regNum += 1
 
+            i = 0
+            for i in range(plusCounter):
+                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0"
+                output.append(instr)
+                i += 1
+            instr = "STR R0, FP, " + str(symbolT[localVar]) + "; write " + localVar
+            output.append(instr)
+            #print(output)
 
+        if "int" not in array and "=" in array and "+" in array:
+            #output = []
+            # parsing
+            localVar = array[array.index("=") - 1]
+            usedParameters = []
+            usedParameterCounter = 0
+            regNum = usedParameterCounter
+            plusCounter = 0
+            plusLocation = []
+            constantLocation = []
+            for element in array:
+                if element == "+":
+                    plusCounter += 1
+                    plusLocation.append(array.index(element))
+            for parameter in parameters:
+                if parameter in array:
+                    usedParameters.append(parameter)
+            if len(usedParameters) < plusCounter + 1:
+                for location in plusLocation:
+                    if array[location - 1] not in (localVar and usedParameters):
+                        constantLocation.append(location - 1)
+                    if array[location + 1] not in (localVar and usedParameters):
+                        constantLocation.append(location + 1)
 
+            # generating instructions
+            for usedParameter in usedParameters:
+                instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[usedParameter]) + "; read " + usedParameter[
+                    usedParameterCounter]
+                output.append(instr)
+                regNum += 1
+
+            for location in constantLocation:
+                instr = "AND R" + str(regNum) + ", R" + str(regNum) + ", 0; clear R" + str(regNum)
+                output.append(instr)
+                instr = "ADD R" + str(regNum) + ", R" + str(regNum) + ", " + str(array[location]) + "; add " + str(
+                    array[location]) + " to R" + str(regNum)
+                output.append(instr)
+                regNum += 1
+
+            i = 0
+            for i in range(plusCounter):
+                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0"
+                output.append(instr)
+                i += 1
+            instr = "STR R0, FP, " + str(symbolT[localVar]) + "; write " + localVar
+            output.append(instr)
+
+    for line in output:
+        print(line)
+    # print(output)
 
 
 if __name__ == '__main__':
-
-
-
-    #print(CreateSymbolTable("sample.code"))
-    #print(SyntaxCheck("illegal.code"))
-    print(AssemblyGenerator("sample.code"))
+    # print(CreateSymbolTable("sample.code"))
+    # print(SyntaxCheck("illegal.code"))
+    # print(AssemblyGenerator("sample.code"))
+    print(AssemblyGeneratorKevin("sample.code"))
 
     '''print(ParseFunctionHeader(str1))
     print(ParseFunctionHeader(str2))
@@ -232,3 +332,8 @@ if __name__ == '__main__':
     print(ParseLine(line6))
     '''
 
+    # 40184/index.html
+    # 43210/choose-db?db=mongo
+#             :30046
+# 165.106.10.170:50515/index.html
+# 40404/pickDatabase?dbchoice=mongo

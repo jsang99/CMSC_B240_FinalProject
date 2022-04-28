@@ -10,7 +10,7 @@ ADD R0, R0, R1; put sum in R0
 STR R0, FP, -1; write y
 
 ;; x = a + 4 ;
-LDR R0, FP, 4;; read a
+LDR R0, FP, 4; read a
 AND R1, R1, 0; clear R1
 ADD R1, R1, 4; add 4 to R1
 ADD R0, R0, R1; put sum in R0

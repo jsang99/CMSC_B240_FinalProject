@@ -1,5 +1,5 @@
 int fun ( int a , int b ) {
-  int x 7 ;
+  int x = 7 ;
   int y = a + b ;
   x = a + 4 ;
   int t = x + b ;
