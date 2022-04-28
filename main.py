@@ -235,11 +235,11 @@ def AssemblyGeneratorKevin(file):
             offset = str(symbolT[localVar])
 
             # generating instructions
-            instr = "AND R0, R0, 0; clear R0"
+            instr = "AND R0, R0, 0; clear R0" + "\n"
             output.append(instr)
-            instr = "ADD R0, R0, " + value + "; add " + value + " to R0"
+            instr = "ADD R0, R0, " + value + "; add " + value + " to R0"  + "\n"
             output.append(instr)
-            instr = "STR R0, FP, " + offset + "; write " + localVar
+            instr = "STR R0, FP, " + offset + "; write " + localVar  + "\n"
             output.append(instr)
             # print(output)
 
@@ -265,16 +265,16 @@ def AssemblyGeneratorKevin(file):
             # generating instructions
             for element in array[array.index("="):]:
                 if element in allLocalVars or usedParameters and element != "=" and element != "+" and element != ";":
-                    instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[element]) + "; read " + element
+                    instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[element]) + "; read " + element + "\n"
                     output.append(instr)
                     regNum += 1
 
             i = 0
             for i in range(plusCounter):
-                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0"
+                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0" + "\n"
                 output.append(instr)
                 i += 1
-            instr = "STR R0, FP, " + str(symbolT[localVar]) + "; write " + localVar
+            instr = "STR R0, FP, " + str(symbolT[localVar]) + "; write " + localVar + "\n"
             output.append(instr)
             # print(output)
 
@@ -307,24 +307,24 @@ def AssemblyGeneratorKevin(file):
             # generating instructions
             for usedParameter in usedParameters:
                 instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[usedParameter]) + "; read " + usedParameters[
-                    usedParameterCounter]
+                    usedParameterCounter] + "\n"
                 output.append(instr)
                 regNum += 1
 
             for location in constantLocation:
-                instr = "AND R" + str(regNum) + ", R" + str(regNum) + ", 0; clear R" + str(regNum)
+                instr = "AND R" + str(regNum) + ", R" + str(regNum) + ", 0; clear R" + str(regNum) + "\n"
                 output.append(instr)
                 instr = "ADD R" + str(regNum) + ", R" + str(regNum) + ", " + str(array[location]) + "; add " + str(
-                    array[location]) + " to R" + str(regNum)
+                    array[location]) + " to R" + str(regNum) + "\n"
                 output.append(instr)
                 regNum += 1
 
             i = 0
             for i in range(plusCounter):
-                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0"
+                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0" + "\n"
                 output.append(instr)
                 i += 1
-            instr = "STR R0, FP, " + str(symbolT[localVar]) + "; write " + localVar
+            instr = "STR R0, FP, " + str(symbolT[localVar]) + "; write " + localVar + "\n"
             output.append(instr)
 
         if "return" in array:
@@ -358,27 +358,27 @@ def AssemblyGeneratorKevin(file):
             # generating instructions
             for element in array:
                 if element in allLocalVars or usedParameters:
-                    instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[element]) + "; read " + element
+                    instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[element]) + "; read " + element + "\n"
                     output.append(instr)
                     regNum += 1
 
             for location in constantLocation:
                 print(array[location])
-                instr = "AND R" + str(regNum) + ", R" + str(regNum) + ", 0; clear R" + str(regNum)
+                instr = "AND R" + str(regNum) + ", R" + str(regNum) + ", 0; clear R" + str(regNum) + "\n"
                 output.append(instr)
                 instr = "ADD R" + str(regNum) + ", R" + str(regNum) + ", " + str(array[location]) + "; add " + str(
-                    array[location]) + " to R" + str(regNum)
+                    array[location]) + " to R" + str(regNum) + "\n"
                 output.append(instr)
                 regNum += 1
 
             i = 0
             for i in range(plusCounter):
-                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0"
+                instr = "ADD R0, R" + str(i) + ", R" + str(i + 1) + "; put sum in R0" + "\n"
                 output.append(instr)
                 i += 1
-            instr = "STR R0, FP, 3; write RV"
+            instr = "STR R0, FP, 3; write RV" + "\n"
             output.append(instr)
-    file1 = open('sample.lc3.output.txt', 'w')
+    file1 = open(file+'_output.lc3', 'w')
     file1.writelines(output)  ###output
     file1.close()  # Closing file
     return output
@@ -387,11 +387,9 @@ if __name__ == '__main__':
     # print(CreateSymbolTable("sample.code"))
     # print(SyntaxCheck("illegal.code"))
     # print(AssemblyGenerator("sample.code"))
-    #for line in AssemblyGeneratorKevin("sample.code"):
-    #    print(line)
+    AssemblyGeneratorKevin("sample.code")
+    AssemblyGeneratorKevin("multi.code")
 
-    for line in AssemblyGeneratorKevin("multi.code"):
-        print(line)
     '''print(ParseFunctionHeader(str1))
     print(ParseFunctionHeader(str2))
     print(ParseFunctionHeader(str3))
