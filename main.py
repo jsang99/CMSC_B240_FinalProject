@@ -210,14 +210,15 @@ def AssemblyGeneratorKevin(file):
     parameters = ParseFunctionHeader(code[0])
     allLocalVars = []
     output = []
-    print("here")
+    #print("here")
     for line in code[1:-1]:
         if "," in line:
             newline = "int"+line[line.index(",")+1:]
             code.insert(code.index(line),newline)
             line = line[:line.index(",")]
-            print(newline)
-            print("line changed to :",line)
+            #print(newline)
+            #print("line changed to :",line)
+            #print(code)
         array = line.split()
         # print(array)
 
@@ -274,7 +275,7 @@ def AssemblyGeneratorKevin(file):
             output.append(instr)
             # print(output)
 
-        if "int" not in array and "=" in array and "+" in array:
+        if "int" not in array and "=" in array:
             # output = []
             # parsing
             localVar = array[array.index("=") - 1]
@@ -381,7 +382,7 @@ if __name__ == '__main__':
     # print(CreateSymbolTable("sample.code"))
     # print(SyntaxCheck("illegal.code"))
     # print(AssemblyGenerator("sample.code"))
-    #for line in AssemblyGeneratorKevin("sample.code"):
+    # for line in AssemblyGeneratorKevin("sample.code"):
     #    print(line)
 
     for line in AssemblyGeneratorKevin("multi.code"):
