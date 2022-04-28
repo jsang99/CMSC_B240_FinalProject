@@ -111,42 +111,37 @@ def AssemblyGenerator(file):
     code = f.readlines()
     # Split by commas (if there are multiple initializations) and have if statements for each split
     for line in code[1:]:
-
-
         print(line)
         # splitarray = line.split(",")         #### splits array if there are multiple commas
         # for part in splitarray:              ###
         array=line.split()
         print(array)
         output = []
-
         for i in range(len(array)-1,-1,-1):
             print(i)
             print(array[i])
+            print(type(array[i]))
 
             array[i]= intChange(array[i])  ## change str to int if possible
 
             if i == len(array) -1:
                 # clear register 0 at beginning of line
-                print('ride of ;')
+                print('rid of ;')
                 output.append("AND R0, R0, 0;")
-                print(output)
-            elif i == 0:
+            elif i == 0 and (array[i] == "int"):
                 print('end')
-
-
-
             elif str(type(array[i])) == "<class 'int'>":
                 print('int')
                 output.append(AddNumber(array[i])[0]) # register 0 holds array[:-1]
             elif array[i] == "+":
                 print("add")                                           ## is t;his wrong???
-            elif array [i] == "=":
+            elif array[i] == "=":
                 print("equals")
                 offset = symbolT[array[i-1]]
                 output.append(WriteVars(offset))
             else: ## just one variable
                 print('var')
+                print()
                 offset = symbolT[array[i]]
                 output.append(AddVariable(offset))
                 print("var add")
@@ -237,8 +232,3 @@ if __name__ == '__main__':
     print(ParseLine(line6))
     '''
 
-                # 40184/index.html
-                # 43210/choose-db?db=mongo
- #             :30046
-#165.106.10.170:50515/index.html
- # 40404/pickDatabase?dbchoice=mongo

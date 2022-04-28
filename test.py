@@ -29,15 +29,23 @@
 
 
 
+#
+# s = '951'
+# isInt = True
+# try:
+#    # converting to integer
+#    int(s)
+# except ValueError:
+#    isInt = False
+# if isInt:
+#    print('Input value is an integer')
+# else:
+#    print('Not an integer')
 
-s = '951'
-isInt = True
-try:
-   # converting to integer
-   int(s)
-except ValueError:
-   isInt = False
-if isInt:
-   print('Input value is an integer')
-else:
-   print('Not an integer')
+
+array = ['int', 'x', '=', '7', ';']
+for i in range (0,5):
+    if array[i] == "=":
+        print("happy")
+    else:
+        print("no")
