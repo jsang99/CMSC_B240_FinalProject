@@ -43,9 +43,13 @@
 #    print('Not an integer')
 
 
-array = ['int', 'x', '=', '7', ';']
-for i in range (0,5):
-    if array[i] == "=":
-        print("happy")
-    else:
-        print("no")
+# array = ['int', 'x', '=', '7', ';']
+# for i in range (0,5):
+#     if array[i] == "=":
+#         print("happy")
+#     else:
+#         print("no")
+
+x = int("=")
+print(type(x))
+print(x)
