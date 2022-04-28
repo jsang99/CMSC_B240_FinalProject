@@ -212,7 +212,7 @@ def AssemblyGeneratorKevin(file):
     output = []
     for line in code[1:-1]:
         array = line.split()
-        print(array)
+        # print(array)
 
         if "int" in array and "=" in array and "+" not in array:
             # output = []
@@ -252,11 +252,11 @@ def AssemblyGeneratorKevin(file):
                     usedParameters.append(parameter)
 
             # generating instructions
-            for usedParameter in usedParameters:
-                instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[usedParameter]) + "; read " + usedParameters[
-                    usedParameterCounter]
-                output.append(instr)
-                regNum += 1
+            for element in array[array.index("="):]:
+                if element in allLocalVars or usedParameters and element != "=" and element != "+" and element != ";":
+                    instr = "LDR R" + str(regNum) + ", FP, " + str(symbolT[element]) + "; read " + element
+                    output.append(instr)
+                    regNum += 1
 
             i = 0
             for i in range(plusCounter):
