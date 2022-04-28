@@ -214,16 +214,17 @@ def AssemblyGeneratorKevin(file):
     parameters = ParseFunctionHeader(code[0])
     allLocalVars = []
     output = []
-    print("here")
     for line in code[1:-1]:
         if "," in line:
             newline = "int"+line[line.index(",")+1:]
             code.insert(code.index(line),newline)
             line = line[:line.index(",")]
-            print(newline)
-            print("line changed to :",line)
+            #print(newline)
+            #print("line changed to :",line)
         array = line.split()
         # print(array)
+        if "int" in array and "=" not in array and "+" not in array:
+            pass
 
         if "int" in array and "=" in array and "+" not in array:
             # output = []
@@ -233,7 +234,7 @@ def AssemblyGeneratorKevin(file):
             if localVar not in allLocalVars:
                 allLocalVars.append(localVar)
             else:
-                return "Error: variable" + localVar + " is being declared a second time"
+                return "Error: variable " + localVar + " is being declared a second time."
             offset = str(symbolT[localVar])
 
             # generating instructions
@@ -285,7 +286,7 @@ def AssemblyGeneratorKevin(file):
             # parsing
             localVar = array[array.index("=") - 1]
             if localVar not in allLocalVars:
-                allLocalVars.append(localVar)
+                return "Error: variable " + localVar + " is undeclared."
             usedParameters = []
             usedParameterCounter = 0
             regNum = usedParameterCounter
@@ -301,10 +302,17 @@ def AssemblyGeneratorKevin(file):
                     usedParameters.append(parameter)
             if len(usedParameters) < plusCounter + 1:
                 for location in plusLocation:
-                    if array[location - 1] not in allLocalVars and array[location - 1] not in usedParameters:
-                        constantLocation.append(location - 1)
-                    if array[location + 1] not in allLocalVars and array[location + 1] not in usedParameters:
+                    if array[location - 1] not in usedParameters:
+                        if array[location - 1] not in allLocalVars and not array[location + 1].isdigit():
+                            return "Error: variable " + array[location - 1] + " is undeclared."
+                        else:
+                            constantLocation.append(location - 1)
+                    if array[location + 1] not in usedParameters:
                         constantLocation.append(location + 1)
+                        if array[location + 1] not in allLocalVars and not array[location + 1].isdigit():
+                            return "Error: variable " + array[location + 1] + " is undeclared."
+                        else:
+                            constantLocation.append(location + 1)
 
             # generating instructions
             for usedParameter in usedParameters:
@@ -355,7 +363,6 @@ def AssemblyGeneratorKevin(file):
                         constantLocation.append(location - 1)
                     if array[location + 1] not in allLocalVars and array[location + 1] not in usedParameters:
                         constantLocation.append(location + 1)
-            print(constantLocation)
 
             # generating instructions
             for element in array:
@@ -365,7 +372,6 @@ def AssemblyGeneratorKevin(file):
                     regNum += 1
 
             for location in constantLocation:
-                print(array[location])
                 instr = "AND R" + str(regNum) + ", R" + str(regNum) + ", 0; clear R" + str(regNum) + "\n"
                 output.append(instr)
                 instr = "ADD R" + str(regNum) + ", R" + str(regNum) + ", " + str(array[location]) + "; add " + str(
@@ -383,14 +389,17 @@ def AssemblyGeneratorKevin(file):
     file1 = open(file+'_output.lc3', 'w')
     file1.writelines(output)  ###output
     file1.close()  # Closing file
+    return "File " + file + " compiled successfully without error."
 
 if __name__ == '__main__':
     # print(CreateSymbolTable("sample.code"))
     # print(SyntaxCheck("illegal.code"))
     # print(AssemblyGenerator("sample.code"))
-    AssemblyGeneratorKevin("sample.code")
-    AssemblyGeneratorKevin("multi.code")
-
+    print(AssemblyGeneratorKevin("sample.code"))
+    print(AssemblyGeneratorKevin("multi.code"))
+    print(AssemblyGeneratorKevin("declare2.code"))
+    print(AssemblyGeneratorKevin("undeclared1.code"))
+    print(AssemblyGeneratorKevin("undeclared2.code"))
     '''print(ParseFunctionHeader(str1))
     print(ParseFunctionHeader(str2))
     print(ParseFunctionHeader(str3))
