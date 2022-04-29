@@ -216,9 +216,19 @@ def AssemblyGeneratorKevin(file):
     output = []
     for line in code[1:-1]:
         if "," in line:
-            newline = "int"+line[line.index(",")+1:]
-            code.insert(code.index(line),newline)
-            line = line[:line.index(",")]
+            new_array = line.split(",")
+            for declaration in new_array:
+                #print(declaration)
+                #print(declaration[0:3])
+                if declaration[0:3] != "int":
+                    declaration = "int " + declaration
+                code.insert(code.index(line), declaration)
+            #for newline in code:
+            #    print(newline)
+            line = new_array[0]
+            #newline = "int"+line[line.index(",")+1:]
+            #code.insert(code.index(line),newline)
+            #line = line[:line.index(",")]
             #print(newline)
             #print("line changed to :",line)
         array = line.split()
